@@ -18,8 +18,15 @@ module.exports = function(grunt) {
             return "(?:"+identifiers.join("|")+")";
         }
 
+        function buildRegex() {
+            var str = "\n?\r?\\/\\*(?:[\\s]+)?" + getIdentifierString() + "<" + "(?:[\\s]+)?\\*\\/" +
+                "([\\s\\S]*?)" +
+                "\\/\\*(?:[\\s]+)?" + ">" + getIdentifierString() + "(?:[\\s]+)?\\*\\/\n?\r?";
+            return new RegExp(str, "gi");
+        }
+
         var regex = {
-            multiline: new RegExp("(?:[\\s"+grunt.util.linefeed+"])?\\/\\*(?:[\\s]+)?"+getIdentifierString()+"<(?:[\\s]+)?\\*\\/([\\s\\S]*)\\/\\*(?:[\\s]+)?>"+getIdentifierString()+"(?:[\\s]+)?\\*\\/(?:[\\s"+grunt.util.linefeed+"])?", "gi")
+            multiline: buildRegex()
         };
 
         function handleCode(code) {
